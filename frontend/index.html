@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en"></html>
+<head>
+  <meta charset="UTF-8">
+  <title>Exam Generator - Advanced Configuration</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+
+  </style>
+</head>
+<body>
+<div class="container mt-5">
+  <h2 class="mb-4 text-center">Exam Generator - Advanced Configuration</h2>
+
+  <!-- Upload Zone -->
+  <div class="drop-zone mb-3">
+    <p>Drag and drop files, images, or videos here,<br>or click to select</p>
+    <input type="file" class="form-control mt-3" multiple>
+  </div>
+
+  <!-- URL Inputs -->
+  <div class="row mb-3">
+    <div class="col-md-6">
+      <input type="text" class="form-control" placeholder="Page URL">
+    </div>
+    <div class="col-md-6">
+      <input type="text" class="form-control" placeholder="Video URL">
+    </div>
+  </div>
+
+  <!-- Load Button -->
+  <div class="mb-4 text-center">
+    <button class="btn btn-primary">Load Content</button>
+  </div>
+
+  <!-- Advanced Configuration by Question Type -->
+  <div class="card p-4 mb-4">
+    <h5 class="mb-3">Configure the exam by question type and difficulty</h5>
+
+    <!-- Question Type Selector -->
+    <div class="mb-4">
+      <label for="questionType" class="form-label">Select question type</label>
+      <select id="questionType" class="form-select">
+        <option value="singleChoice">Multiple Choice (one correct)</option>
+        <option value="multipleChoice">Multiple Choice (one or more correct)</option>
+        <option value="trueFalse">True / False</option>
+        <option value="shortAnswer">Short Answer</option>
+      </select>
+    </div>
+
+    <!-- Dynamic Configuration -->
+    <div id="questionTypeConfiguration">
+      <!-- Initial Configuration (Multiple Choice - One Correct) -->
+      <div class="type-header mb-2">Multiple Choice (one correct)</div>
+      <div class="row g-2">
+        <div class="col-md-6">
+          <label>Total Questions</label>
+          <input type="number" class="form-control" value="5">
+        </div>
+        <div class="col-md-6">
+          <label>Easy</label>
+          <input type="number" class="form-control" value="2">
+        </div>
+        <div class="col-md-6">
+          <label>Medium</label>
+          <input type="number" class="form-control" value="2">
+        </div>
+        <div class="col-md-6">
+          <label>Hard</label>
+          <input type="number" class="form-control" value="1">
+        </div>
+      </div>
+    </div>
+
+    <button id="addQuestionType" class="btn btn-secondary w-100 mt-3">Add Question Type</button>
+
+    <!-- List of Added Configurations -->
+    <div id="configurationList" class="mt-4"></div>
+
+    <button id="generateExam" class="btn btn-success w-100 mt-4">Generate Exam</button>
+  </div>
+
+  <script>
+    addQuestionType.addEventListener('click', () => {
+      const newConfiguration = document.createElement('div');
+      newConfiguration.classList.add('mb-4');
+      newConfiguration.innerHTML = `
+        <div class="type-header mb-2">${questionType.options[questionType.selectedIndex].text}</div>
+        <div class="row g-2">
+          <div class="col-md-3">
+            <label>Total Questions</label>
+            <input type="number" class="form-control" value="5" disabled>
+          </div>
+          <div class="col-md-3">
+            <label>Easy</label>
+            <input type="number" class="form-control" value="2" disabled>
+          </div>
+          <div class="col-md-3">
+            <label>Medium</label>
+            <input type="number" class="form-control" value="2" disabled>
+          </div>
+          <div class="col-md-3">
+            <label>Hard</label>
+            <input type="number" class="form-control" value="1" disabled>
+          </div>
+        </div>
+        <button class="btn btn-sm btn-outline-primary mt-2 edit-configuration">Edit</button>
+      `;
+      configurationList.appendChild(newConfiguration);
+
+      newConfiguration.querySelector('.edit-configuration').addEventListener('click', (e) => {
+        const inputs = newConfiguration.querySelectorAll('input');
+        inputs.forEach(input => input.disabled = !input.disabled);
+        e.target.textContent = inputs[0].disabled ? 'Edit' : 'Save';
+      });
+    });
+  </script>
+    </div>
+
+    <!-- Spinner -->
+    <div id="spinner" class="text-center my-4" style="display: none;">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+    </div>
+
+    <!-- Exam Preview -->
+    <div id="examPreview" style="display: none;">
+      <h5 class="mb-3">Exam Preview</h5>
+
+      <!-- Multiple Choice (One Correct) -->
+      <div class="question-card">
+        <strong>What is the capital of Germany?</strong>
+        <ul>
+          <li><input type="radio" name="capitalGermany"> Berlin</li>
+          <li><input type="radio" name="capitalGermany"> Munich</li>
+          <li><input type="radio" name="capitalGermany"> Hamburg</li>
+          <li><input type="radio" name="capitalGermany"> Frankfurt</li>
+        </ul>
+        <button class="btn btn-sm btn-outline-secondary">Edit</button>
+        <button class="btn btn-sm btn-outline-primary">Regenerate with AI</button>
+      </div>
+
+      <div class="question-card">
+        <strong>Which country is known as the Land of the Rising Sun?</strong>
+        <ul>
+          <li><input type="radio" name="risingSun"> Japan</li>
+          <li><input type="radio" name="risingSun"> China</li>
+          <li><input type="radio" name="risingSun"> South Korea</li>
+          <li><input type="radio" name="risingSun"> Thailand</li>
+        </ul>
+        <button class="btn btn-sm btn-outline-secondary">Edit</button>
+        <button class="btn btn-sm btn-outline-primary">Regenerate with AI</button>
+      </div>
+
+      <!-- Multiple Choice (More than One Correct) -->
+      <div class="question-card">
+        <strong>Which of the following are planets in the solar system?</strong>
+        <ul>
+          <li><input type="checkbox" name="planets"> Mars</li>
+          <li><input type="checkbox" name="planets"> Pluto</li>
+          <li><input type="checkbox" name="planets"> Jupiter</li>
+          <li><input type="checkbox" name="planets"> Alpha Centauri</li>
+        </ul>
+        <button class="btn btn-sm btn-outline-secondary">Edit</button>
+        <button class="btn btn-sm btn-outline-primary">Regenerate with AI</button>
+      </div>
+
+      <div class="question-card">
+        <strong>Which of the following are programming languages?</strong>
+        <ul>
+          <li><input type="checkbox" name="languages"> Python</li>
+          <li><input type="checkbox" name="languages"> HTML</li>
+          <li><input type="checkbox" name="languages"> CSS</li>
+          <li><input type="checkbox" name="languages"> Java</li>
+        </ul>
+        <button class="btn btn-sm btn-outline-secondary">Edit</button>
+        <button class="btn btn-sm btn-outline-primary">Regenerate with AI</button>
+      </div>
+
+      <!-- True / False -->
+      <div class="question-card">
+        <strong>Water boils at 100 degrees Celsius. (True/False)</strong>
+        <ul>
+          <li><input type="radio" name="waterBoils"> True</li>
+          <li><input type="radio" name="waterBoils"> False</li>
+        </ul>
+        <button class="btn btn-sm btn-outline-secondary">Edit</button>
+        <button class="btn btn-sm btn-outline-primary">Regenerate with AI</button>
+      </div>
+
+      <div class="question-card">
+        <strong>The Earth is the third planet from the Sun. (True/False)</strong>
+        <ul>
+          <li><input type="radio" name="thirdPlanet"> True</li>
+          <li><input type="radio" name="thirdPlanet"> False</li>
+        </ul>
+        <button class="btn btn-sm btn-outline-secondary">Edit</button>
+        <button class="btn btn-sm btn-outline-primary">Regenerate with AI</button>
+      </div>
+      <!-- Short Answer -->
+      <div class="question-card">
+        <strong>Who is known as the father of computing?</strong>
+        <ul>
+          <li>Answer: _________</li>
+        </ul>
+        <button class="btn btn-sm btn-outline-secondary">Edit</button>
+        <button class="btn btn-sm btn-outline-primary">Regenerate with AI</button>
+      </div>
+
+      <div class="question-card">
+        <strong>What is the chemical symbol for water?</strong>
+        <ul>
+          <li>Answer: _________</li>
+        </ul>
+        <button class="btn btn-sm btn-outline-secondary">Edit</button>
+        <button class="btn btn-sm btn-outline-primary">Regenerate with AI</button>
+      </div>
+    </div>
+    </div>
+
+  <script>
+    const questionType = document.getElementById('questionType');
+    const questionTypeConfiguration = document.getElementById('questionTypeConfiguration');
+    const addQuestionType = document.getElementById('addQuestionType');
+    const configurationList = document.getElementById('configurationList');
+    const generateExam = document.getElementById('generateExam');
+    const spinner = document.getElementById('spinner');
+    const examPreview = document.getElementById('examPreview');
+
+    questionType.addEventListener('change', () => {
+      questionTypeConfiguration.innerHTML = configurations[questionType.value];
+    });
+
+    addQuestionType.addEventListener('click', () => {
+      const newConfiguration = document.createElement('div');
+      newConfiguration.classList.add('mb-4');
+      newConfiguration.innerHTML = configurations[questionType.value];
+      configurationList.appendChild(newConfiguration);
+    });
+
+    generateExam.addEventListener('click', () => {
+      spinner.style.display = 'block';
+      examPreview.style.display = 'none';
+
+      setTimeout(() => {
+        spinner.style.display = 'none';
+        examPreview.style.display = 'block';
+      }, 2000);
+    });
+  </script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
