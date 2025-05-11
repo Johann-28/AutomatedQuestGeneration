@@ -3,9 +3,12 @@
 #pip install PyPDF2
 #pip install python-dotenv
 
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from llm import get_exam_questions
+from fastapi import UploadFile, File
+from typing import List
 
 app = FastAPI()	
 
@@ -18,10 +21,7 @@ app.add_middleware(
     allow_headers=["*"],  # Permitir todos los encabezados
 )
 
-@app.get("/questions")
-async def get_questions():
-    return get_exam_questions()
-
-
-
+@app.post("/questions")
+async def get_questions(files: List[UploadFile] = File(...)):
+    return get_exam_questions(files)
 

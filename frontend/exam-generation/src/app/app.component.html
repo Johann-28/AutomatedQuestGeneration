@@ -12,7 +12,7 @@
     <!-- Upload Zone -->
     <div class="drop-zone mb-3">
       <p>Drag and drop files, images, or videos here,<br>or click to select</p>
-      <input type="file" class="form-control mt-3" (change)="onFilesSelected($event)" multiple>
+      <input required type="file" class="form-control mt-3" (change)="onFilesSelected($event)" multiple>
     </div>
 
     <!-- URL Inputs -->
@@ -74,7 +74,7 @@
       <!-- List of Added Configurations -->
       <div id="configurationList" class="mt-4"></div>
 
-      <button (click)="generateQuestions()" id="generateExam" class="btn btn-success w-100 mt-4">Generate Exam</button>
+      <button [disabled]="!filesSelected" (click)="generateQuestions()" id="generateExam" class="btn btn-success w-100 mt-4">Generate Exam</button>
     </div>
 
     <div *ngFor="let question of questions" class="question-card">
